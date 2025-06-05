@@ -1,0 +1,4 @@
+megaLit = Ed.TuneString(199,"d4m4G4g4f4d4f4g4d4m4G4g4f4d4f2g4d4m4G4g4f4d2f4g4d4m4G4g4f4d2f4g4d4m4G4g4f4d4f2g4d4a2G2g4f4d4f4g4d4a4G4g4f4d4f4g4d4a4G4g4f4d4f4g4d4a4G4g4f4d4g4d4a4G4g4f4d4f4g4d4a4G4g2f4d4f4g4d4a4G4g4g4f4d4f4g4d4a4Gz")
+Ed.PlayTune(megaLit)
+while Ed.ReadMusicEnd() == Ed.MUSIC_FINISHED:
+    pass
