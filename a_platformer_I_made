@@ -1,0 +1,150 @@
+World.frameRate = 30;
+var speed = 4;
+var gravity = 0.4;
+var jumpForce = 10;
+var touchingGround = false;
+var score = 0;
+var sword;
+var hasSword;
+hasSword = 0;
+var wendy;
+wendy = createSprite(30,300,2,2);
+wendy.setAnimation("wendy");
+var currentlevel = 1;
+var walls = createGroup();
+var wallsMade = 0;
+var mendy;
+
+function setupLevel() {
+
+if (currentlevel == 1 && wallsMade == 0) {
+  walls.add(createSprite (30, 350, 70, 35));
+  walls.add(createSprite (230, 350, 20, 20));
+  walls.add(createSprite (340,280, 20, 20));
+  walls.add(createSprite (230,230, 20, 20));
+  walls.add(createSprite (115,180, 50, 20));
+  walls.add(createSprite (80,40, 25, 300));
+  walls.add(createSprite (150,30, 25, 250));
+  wallsMade = 1;
+  
+} 
+if (currentlevel == 2 && wallsMade == 0) {
+  walls.add(createSprite (30, 350, 20, 15));
+  walls.add(createSprite (155, 285,10, 10));
+  walls.add(createSprite (302,258, 10, 10));
+  walls.add(createSprite (240,185, 10, 10));
+  walls.add(createSprite (115,150, 10, 10));
+  walls.add(createSprite (185,75, 10, 10));
+  walls.add(createSprite (305,75, 50, 10));
+  walls.add(createSprite (365, 40, 10, 10));
+  sword = createSprite(306, 46, 25, 30);
+  sword.setAnimation("sword");
+  
+  wallsMade = 1;
+  }
+  if (currentlevel == 3 && wallsMade == 0) {
+    sword.destroy();
+    walls.add(createSprite (30, 350, 20, 15));
+    walls.add(createSprite (114, 342, 10, 10));
+    walls.add(createSprite (204, 337, 10, 10));
+    walls.add(createSprite (328, 304, 100, 10));
+    mendy = (createSprite (365, 288, 2, 2));
+    mendy.setAnimation("mendy");
+    wallsMade = 1;
+  }
+}
+function swordGrabbing() {
+  if (sword && wendy && typeof wendy.isTouching === "function") {
+    if (wendy.isTouching(sword)) {
+      hasSword = 1;
+      wendy.setAnimation("wendy_with_swordR");
+      sword.destroy();
+      
+    
+    }
+  }
+}
+function mendyDeath() {
+  if (mendy && wendy && typeof wendy.isTouching === "function") {
+    if (wendy.isTouching(mendy)) {
+    mendy.setAnimation("mendy_death");
+    }
+  }
+}
+function draw() {
+  background("green");
+  setupLevel();
+  levelEnd1();
+  playerGravity();
+  checkGround();
+  swordGrabbing();
+  playerCollision();
+  playerMovement();
+  mendyDeath();
+  deathCounter();
+  drawSprites();
+}
+function deathCounter() {
+if (wendy.y > 400);
+fill("neon ultra black");
+text("Deaths:" + score, 20, 20);
+
+}
+
+
+function playerMovement() {
+  if (keyDown("d")) {
+    if (hasSword == 0) {
+    wendy.setAnimation("wendy");
+    } else {
+    wendy.setAnimation("wendy_with_swordR");
+    }
+    wendy.x +=speed;
+    
+  }
+  if (keyDown("a")) {
+    if (hasSword == 0) {
+    wendy.setAnimation("wendy_copy_1");
+    } else {
+    wendy.setAnimation("wendy_with_swordL");
+    }
+    wendy.x -=speed;
+  }
+  if (keyDown("w")) {
+    if (touchingGround)
+    wendy.velocityY = -jumpForce;
+  }
+  
+}
+  
+function playerGravity() {
+  wendy.velocityY += gravity;
+}
+
+function playerCollision() {
+  wendy.collide(walls);
+  if (wendy.y > 400) {
+    score = score + 1; 
+    wendy.x = 40;
+    wendy.y = 300;
+    wendy.setVelocity(0, 0);
+  }
+}
+function checkGround() {
+  wendy.y +=0.5;
+  touchingGround = wendy.isTouching(walls);
+  wendy.y -= 0.5;
+}
+
+
+function levelEnd1() {
+  if (wendy.y < 0) {
+    currentlevel += 1;
+    wallsMade = 0;
+    wendy.y = 300;
+    wendy.x = 30;
+    wendy.setVelocity(0, 0);
+    walls.destroyEach();
+    walls.clear();
+  }
+}
